@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/myWeather/my_weather.dart';
 
 import 'hourly_forecast_list.dart';
 import 'server.dart';
@@ -10,22 +11,15 @@ void main() {
 
 class HorizonsApp extends StatelessWidget {
   HorizonsApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  const MaterialApp(
         debugShowCheckedModeBanner: false,
-        // This is the theme of your application.
-        theme: ThemeData.dark(),
-        // Scrolling in Flutter behaves differently depending on the
-        // ScrollBehavior. By default, ScrollBehavior changes depending
-        // on the current platform. For the purposes of this scrolling
-        // workshop, we're using a custom ScrollBehavior so that the
-        // experience is the same for everyone - regardless of the
-        // platform they are using.
-        scrollBehavior: const ConstantScrollBehavior(),
+        scrollBehavior: ConstantScrollBehavior(),
         title: 'Horizons Weather',
-        home: ForecastWidget());
+        home: MyWeather());
   }
 }
 
@@ -52,7 +46,6 @@ class _ForecastWidgetState extends State<ForecastWidget> {
           onRefresh: () async {
             await Server.refresh();
             await Server.save();
-            print('Refresh was called');
           },
           child: CustomScrollView(
             slivers: <Widget>[
@@ -63,7 +56,7 @@ class _ForecastWidgetState extends State<ForecastWidget> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_view_week), label: 'Weekly'),
             BottomNavigationBarItem(

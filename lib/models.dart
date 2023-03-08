@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:weather_icons/weather_icons.dart';
+
 class DailyForecast {
   final DateTime time;
   final WeatherCode weathercode;
@@ -93,50 +96,51 @@ class HourlyForecast {
 // 95 * 	Thunderstorm: Slight or moderate
 // 96, 99 * 	Thunderstorm with slight and heavy hail
 enum WeatherCode {
-  ClearSky(0, 'Clear sky'),
+  ClearSky(0, 'Clear sky', WeatherIcons.day_sunny),
 
-  MainlyClear(1, 'Mainly clear'),
-  PartlyCloudy(2, 'Partly cloudy'),
-  Overcast(3, 'Overcast'),
+  MainlyClear(1, 'Mainly clear', WeatherIcons.day_sunny),
+  PartlyCloudy(2, 'Partly cloudy', WeatherIcons.day_cloudy),
+  Overcast(3, 'Overcast',  WeatherIcons.cloudy),
 
-  Fog(45, 'Fog'),
-  DepositingRimeFog(48, 'Depositing rime fog'),
+  Fog(45, 'Fog',  WeatherIcons.day_fog),
+  DepositingRimeFog(48, 'Depositing rime fog',  WeatherIcons.fog),
 
-  DrizzleLight(51, 'Drizzle: Light intensity'),
-  DrizzleModerate(53, 'Drizzle: Moderate intensity'),
-  DrizzleDense(55, 'Drizzle: Dense intensity'),
+  DrizzleLight(51, 'Drizzle: Light intensity',WeatherIcons.day_sprinkle),
+  DrizzleModerate(53, 'Drizzle: Moderate intensity', WeatherIcons.day_showers),
+  DrizzleDense(55, 'Drizzle: Dense intensity', WeatherIcons.day_showers),
 
-  FreezingDrizzleLight(56, 'Freezing Drizzle: Light intensity'),
-  FreezingDrizzleDense(57, 'Freezing Drizzle: dense intensity'),
+  FreezingDrizzleLight(56, 'Freezing Drizzle: Light intensity', WeatherIcons.snow_wind),
+  FreezingDrizzleDense(57, 'Freezing Drizzle: dense intensity',  WeatherIcons.snow_wind),
 
-  RainSlight(61, 'Rain: Slight intensity'),
-  RainModerate(63, 'Rain: Moderate intensity'),
-  RainHeavy(65, 'Rain: Heavy intensity'),
+  RainSlight(61, 'Rain: Slight intensity', WeatherIcons.showers),
+  RainModerate(63, 'Rain: Moderate intensity',  WeatherIcons.day_rain),
+  RainHeavy(65, 'Rain: Heavy intensity',  WeatherIcons.rain),
 
-  FreezingRainLight(66, 'Freezing Rain: Light intensity'),
-  FreezingRainHeavy(66, 'Freezing Rain: Heavy intensity'),
+  FreezingRainLight(66, 'Freezing Rain: Light intensity', WeatherIcons.showers),
+  FreezingRainHeavy(66, 'Freezing Rain: Heavy intensity', WeatherIcons.rain_wind),
 
-  SnowFallSlight(71, 'Snow fall: Slight intensity'),
-  SnowFallModerate(73, 'Snow fall: Moderate intensity'),
-  SnowFallHeavy(75, 'Snow fall: Heavy intensity'),
+  SnowFallSlight(71, 'Snow fall: Slight intensity', WeatherIcons.day_snow),
+  SnowFallModerate(73, 'Snow fall: Moderate intensity', WeatherIcons.day_snow),
+  SnowFallHeavy(75, 'Snow fall: Heavy intensity', WeatherIcons.day_sleet),
 
-  SnowGrains(77, 'Snow grains'),
+  SnowGrains(77, 'Snow grains',  WeatherIcons.snowflake_cold),
 
-  RainShowersSlight(80, 'Rain showers: Slight'),
-  RainShowersModerate(81, 'Rain showers: Moderate'),
-  RainShowersVoilent(82, 'Rain showers: Violent'),
+  RainShowersSlight(80, 'Rain showers: Slight', WeatherIcons.showers),
+  RainShowersModerate(81, 'Rain showers: Moderate',  WeatherIcons.showers),
+  RainShowersVoilent(82, 'Rain showers: Violent', WeatherIcons.rain_wind),
 
-  SnowShowersSlight(85, 'Snow showers: Slight'),
-  SnowShowersHeavy(86, 'Snow showers: Heavy'),
+  SnowShowersSlight(85, 'Snow showers: Slight',  WeatherIcons.snow),
+  SnowShowersHeavy(86, 'Snow showers: Heavy', WeatherIcons.day_snow_thunderstorm),
 
-  Thunerstorm(95, 'Thunderstorm: Slight or moderate'),
-  ThunderstormSlightHail(96, 'Thunderstorm with slight hail'),
-  ThunderstormHeavyHail(99, 'Thunderstorm with heavy hail'),
+  Thunerstorm(95, 'Thunderstorm: Slight or moderate',  WeatherIcons.thunderstorm),
+  ThunderstormSlightHail(96, 'Thunderstorm with slight hail',  WeatherIcons.day_sleet_storm),
+  ThunderstormHeavyHail(99, 'Thunderstorm with heavy hail',  WeatherIcons.day_sleet_storm),
   ;
 
   final int numeric;
   final String description;
-  const WeatherCode(this.numeric, this.description);
+  final IconData iconData;
+  const WeatherCode(this.numeric, this.description, this.iconData);
 
   static final _map =
       Map.fromEntries(WeatherCode.values.map((e) => MapEntry(e.numeric, e)));

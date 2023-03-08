@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +49,14 @@ class Server {
     if (_data == null) return [];
     final hourly = _data!['hourly'] as Map<String, dynamic>;
     return HourlyForecast.fromJson(hourly);
+  }
+
+  static Future<String?> getCity() async {
+    String? res = "default";
+    Position pos = await _determinePosition();
+    await placemarkFromCoordinates(pos.latitude, pos.longitude)
+        .then((List<Placemark> value) => res = value[0].locality);
+    return res;
   }
 
   /// Determine the current position of the device.
