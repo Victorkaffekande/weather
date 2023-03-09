@@ -14,58 +14,62 @@ class MyWeather extends StatefulWidget {
 }
 
 class _MyWeatherState extends State<MyWeather> {
-
   final _tabs = [
     CurrentWeather.new,
     WeekWeather.new,
   ];
-  int _selectedIndex =1;
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text("filler appbar"),
-        leading: Icon(WeatherIcons.alien),
-      ),
-      //appbar scrolldown refresh
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Stack(children: [
-          //TODO REPLACE BASED ON WEATHER
-          Image.asset(
-            "assets/cloudy.jpeg",
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
+    return FutureBuilder(
+      future: Server.refresh(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          extendBody: true,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: Text("filler appbar"),
+            leading: Icon(WeatherIcons.alien),
           ),
-          //semi transparent layer
-          Container(
-            decoration: const BoxDecoration(color: Colors.black38),
+          //appbar scrolldown refresh
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: Stack(children: [
+              //TODO REPLACE BASED ON WEATHER
+              Image.asset(
+                "assets/cloudy.jpeg",
+                fit: BoxFit.cover,
+                height: double.infinity,
+                width: double.infinity,
+              ),
+              //semi transparent layer
+              Container(
+                decoration: const BoxDecoration(color: Colors.black38),
+              ),
+              //display layer
+              _tabs.elementAt(_selectedIndex).call(),
+            ]),
           ),
-          //display layer
-          FutureBuilder(
-              future: Server.refresh(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return CurrentWeather();
-              }),
-        ]),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-
-        items: const [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.window_outlined), label: 'Today'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_view_week_outlined), label: 'Week'),
-      ],
-
-      ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            currentIndex: _selectedIndex,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.window_outlined), label: 'Today'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.calendar_view_week_outlined), label: 'Week'),
+            ],
+            onTap: (value) {
+              _selectedIndex = value;
+              setState(() {});
+            },
+          ),
+        );
+      },
     );
     //location
     //current weather

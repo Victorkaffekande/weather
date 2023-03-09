@@ -15,10 +15,11 @@ class HorizonsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
         scrollBehavior: ConstantScrollBehavior(),
         title: 'Horizons Weather',
+        theme: ThemeData.dark(),
         home: MyWeather());
   }
 }
