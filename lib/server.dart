@@ -37,6 +37,12 @@ class Server {
     final response = await http.get(Uri.parse(url));
     final jsonString = response.body;
     _data = json.decode(jsonString);
+    return _data;
+  }
+
+  static DailyForecast? getTodayForecast(){
+    if (_data == null) return null;
+    return getDailyForecast().first;
   }
 
   static List<DailyForecast> getDailyForecast() {
@@ -52,8 +58,9 @@ class Server {
   }
 
   static Future<String?> getCity() async {
-    String? res = "default";
+    String? res;
     Position pos = await _determinePosition();
+    print(pos);
     await placemarkFromCoordinates(pos.latitude, pos.longitude)
         .then((List<Placemark> value) => res = value[0].locality);
     return res;

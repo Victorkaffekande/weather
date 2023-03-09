@@ -18,69 +18,69 @@ class CurrentWeather extends StatefulWidget {
 class _CurrentWeatherState extends State<CurrentWeather> {
   //String city =
   final DailyForecast _today = Server.getDailyForecast().first;
-
-  String city = "default";
-
-  setCity() async {
-    print("set city");
-    var a = await Server.getCity();
-    setState(() {
-      city = a!;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setCity();
-  }
+  final HourlyForecast _now = Server.getHourlyForecast().first;
+  late String city;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-
-      builder: (context, snapshot) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 150, 10, 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                WeatherText(
-                  text: city,
-                  size: Size.large,
-                ),
-                WeatherText(
-                  text:
-                      "${_today.time.toString().split(" ")[0]} ${_today.getWeekday()}",
-                  size: Size.small,
-                ),
-              ],
-            ),
-            _buildWeatherStats(_today)
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 150, 10, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [_buildCityDate(), _buildWeatherStats()],
       ),
     );
   }
 
-  _buildWeatherStats(DailyForecast today) {
+  _getCity() async {
+    city = (await Server.getCity())!;
+    print(city);
+    return city;
+  }
+
+  _buildCityDate() {
+    return FutureBuilder(
+      future: _getCity(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return CircularProgressIndicator();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            WeatherText(
+              text: city,
+              size: Size.large,
+            ),
+            WeatherText(
+              text:
+                  "${_today.time.toString().split(" ")[0]} ${_today.getWeekday()}",
+              size: Size.small,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _buildWeatherStats() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WeatherText(
-          text: "${today.temperature_2m_max}\u2103",
+          text: "${_now.temperature_2m}\u2103",
           size: Size.giga,
           fontWeight: FontWeight.w300,
+        ),
+        WeatherText(
+          text: "Feels like ${_now.apparent_temperature}\u2103",
+          size: Size.medium,
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
               Icon(
-                today.weathercode.iconData,
+                _today.weathercode.iconData,
                 color: Colors.white,
                 size: 50,
               ),
@@ -88,7 +88,7 @@ class _CurrentWeatherState extends State<CurrentWeather> {
                 padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
                 child: SingleChildScrollView(
                     child: WeatherText(
-                        text: today.weathercode.description,
+                        text: _today.weathercode.description,
                         size: Size.medium)),
               )
             ],
@@ -96,18 +96,38 @@ class _CurrentWeatherState extends State<CurrentWeather> {
         ),
         //Break line
         Container(
-          margin: EdgeInsets.symmetric(vertical: 40),
+          margin: EdgeInsets.fromLTRB(0,40,0,10),
           decoration: BoxDecoration(border: Border.all(color: Colors.white30)),
         ),
         Row(
-          children: const [
-            WeatherText(
-              text: "80 m/s",
-              size: Size.small,
-            ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSingleStat(WeatherIcons.rain, "${_now.precipitation}mm"),
+            _buildSingleStat(WeatherIcons.rain, "${_now.precipitation_probability}%"),
           ],
         ),
       ],
     );
+  }
+
+  _buildSingleStat(IconData icon, String s) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon,color: Colors.white,size: 30,),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: WeatherText(
+              text:s,
+              size: Size.small,
+            ),
+          ),
+        ],
+      ),
+    );
+
   }
 }
