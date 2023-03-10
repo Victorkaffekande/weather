@@ -57,7 +57,7 @@ class Server {
   }
 
   static restore() async {
-    print("resure run");
+    print("restore run");
     final prefs = await SharedPreferences.getInstance();
     final jsonString = await prefs.getString(forecastKey);
     if (jsonString == null) return;

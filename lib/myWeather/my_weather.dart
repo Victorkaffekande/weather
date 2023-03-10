@@ -71,7 +71,5 @@ class _MyWeatherState extends State<MyWeather> {
         );
       },
     );
-    //location
-    //current weather
   }
 }
