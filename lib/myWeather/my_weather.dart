@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weather/myWeather/current_weather.dart';
+import 'package:weather/myWeather/current_weather_screen.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../models.dart';
 import '../server.dart';
-import 'WeekWeather.dart';
+import 'week_weather.dart';
 
 class MyWeather extends StatefulWidget {
   const MyWeather({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class MyWeather extends StatefulWidget {
 
 class _MyWeatherState extends State<MyWeather> {
   final _tabs = [
-    CurrentWeather.new,
+    CurrentWeatherScreen.new,
     WeekWeather.new,
   ];
   int _selectedIndex = 0;
@@ -23,17 +24,16 @@ class _MyWeatherState extends State<MyWeather> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Server.refresh(),
+      future: Server.reload(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
         return Scaffold(
           extendBodyBehindAppBar: true,
           extendBody: true,
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            title: Text("filler appbar"),
-            leading: Icon(WeatherIcons.alien),
+
           ),
           //appbar scrolldown refresh
           body: Align(

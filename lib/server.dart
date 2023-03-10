@@ -13,12 +13,53 @@ const String headerImage = '${baseAssetURL}/header.jpeg';
 const String baseForecastUrl =
     'https://api.open-meteo.com/v1/forecast?hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation&daily=weathercode,temperature_2m_max,temperature_2m_min&windspeed_unit=ms&timezone=auto';
 
+const forecastKey = 'forecast';
+const timestampKey = "timestamp";
+
 class Server {
   static Map<String, dynamic>? _data;
 
-  static restore() async {
+  static reload() async {
+    if (await _checkTime()) {
+      await refresh();
+      await save();
+      await _saveTime();
+    }else{
+      await restore();
+    }
+    return _data;
+  }
+
+  static Future<bool> _checkTime() async {
+    int a = await _getTime();
+    DateTime before = DateTime.fromMillisecondsSinceEpoch(a);
+    DateTime now = DateTime.now();
+    Duration timeDifference = now.difference(before);
+    //if diff > 5min or null -> save new time
+    if (timeDifference >= const Duration(minutes: 5)){
+     return true;
+    }
+    return false;
+  }
+
+  static _saveTime() async {
+    final time = DateTime.now().millisecondsSinceEpoch;
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = await prefs.getString('forecast');
+    final jsonString = json.encode(time);
+    await prefs.setString(timestampKey, jsonString);
+  }
+
+  static _getTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(timestampKey);
+    if (jsonString == null) return;
+    return json.decode(jsonString);
+  }
+
+  static restore() async {
+    print("resure run");
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = await prefs.getString(forecastKey);
     if (jsonString == null) return;
     _data = json.decode(jsonString);
   }
@@ -26,7 +67,7 @@ class Server {
   static save() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = json.encode(_data);
-    await prefs.setString('forecast', jsonString);
+    await prefs.setString(forecastKey, jsonString);
   }
 
   static refresh() async {
@@ -40,7 +81,7 @@ class Server {
     return _data;
   }
 
-  static DailyForecast? getTodayForecast(){
+  static DailyForecast? getTodayForecast() {
     if (_data == null) return null;
     return getDailyForecast().first;
   }
