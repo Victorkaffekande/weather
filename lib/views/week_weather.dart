@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:weather/models.dart';
-import 'package:weather/myWeather/util/glass.dart';
-import 'package:weather/myWeather/weather_text.dart';
 
+
+import 'package:weather/util/weather_text.dart';
+
+import '../models/forecast.dart';
 import '../server.dart';
+import '../util/glass.dart';
 
 class WeekWeather extends StatefulWidget {
   final Forecast forecast;

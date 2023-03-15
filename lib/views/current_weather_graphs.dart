@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:weather/models.dart';
-import 'package:weather/myWeather/charts/precipitation_chart.dart';
-import 'package:weather/myWeather/charts/temperature_chart.dart';
 
+
+import '../charts/precipitation_chart.dart';
+import '../charts/temperature_chart.dart';
+import '../models/forecast.dart';
+import '../models/hourly_forecast.dart';
 import '../server.dart';
 
 class CurrentWeatherGraphs extends StatefulWidget {

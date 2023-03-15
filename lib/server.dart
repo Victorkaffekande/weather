@@ -4,7 +4,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'models.dart';
+
+import 'models/daily_forecast.dart';
+import 'models/forecast.dart';
+import 'models/hourly_forecast.dart';
+
 
 const String baseAssetURL =
     'https://dartpad-workshops-io2021.web.app/getting_started_with_slivers/assets';

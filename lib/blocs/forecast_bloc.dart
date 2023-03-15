@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 
-import '../models.dart';
+import '../models/forecast.dart';
 import '../server.dart';
 
 @immutable
@@ -15,6 +15,7 @@ class LoadingState extends AppState {}
 class ForecastState extends AppState {
   final Forecast forecast;
   final Placemark placemark;
+
   ForecastState(this.forecast, this.placemark);
 }
 
@@ -45,8 +46,10 @@ class ForecastBloc extends Bloc<AppEvent, AppState> {
     on<RefreshEvent>((event, emit) async {
       //show old data while loading new data
       if (state is LoadedState) {
-        emit(RefreshState(
-            (state as LoadedState).forecast, (state as LoadedState).placemark));
+        emit(
+          RefreshState((state as LoadedState).forecast,
+              (state as LoadedState).placemark),
+        );
       } else {
         emit(LoadingState());
       }

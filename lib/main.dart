@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather/myWeather/forecast_bloc.dart';
-import 'package:weather/myWeather/my_weather.dart';
+import 'package:weather/blocs/forecast_bloc.dart';
+import 'package:weather/views/my_weather.dart';
+
 
 void main() {
   runApp(HorizonsApp());

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 
-import '../models.dart';
-import 'current_weather.dart';
-import 'current_weather_graphs.dart';
+import '../models/daily_forecast.dart';
+import '../models/forecast.dart';
+import '../views/current_weather.dart';
+import '../views/current_weather_graphs.dart';
 
 class CurrentWeatherScreen extends StatelessWidget {
   final Forecast _forecast;

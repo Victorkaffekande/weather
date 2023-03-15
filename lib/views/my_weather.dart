@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather/myWeather/current_weather.dart';
-import 'package:weather/myWeather/current_weather_screen.dart';
-import 'package:weather/myWeather/forecast_bloc.dart';
-import 'package:weather_icons/weather_icons.dart';
 
-import '../models.dart';
-import '../server.dart';
-import 'week_weather.dart';
+import 'package:weather/blocs/forecast_bloc.dart';
+import 'package:weather/views/week_weather.dart';
+
+import 'current_weather_screen.dart';
+
 
 class MyWeather extends StatefulWidget {
   const MyWeather({Key? key}) : super(key: key);
