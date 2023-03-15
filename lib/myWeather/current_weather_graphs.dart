@@ -6,17 +6,19 @@ import 'package:weather/myWeather/charts/temperature_chart.dart';
 import '../server.dart';
 
 class CurrentWeatherGraphs extends StatefulWidget {
-  const CurrentWeatherGraphs({Key? key}) : super(key: key);
+  final Forecast forecast;
+
+  const CurrentWeatherGraphs(this.forecast,{Key? key}) : super(key: key);
 
   @override
   State<CurrentWeatherGraphs> createState() => _CurrentWeatherGraphsState();
 }
 
 class _CurrentWeatherGraphsState extends State<CurrentWeatherGraphs> {
-  List<HourlyForecast> forecast = Server.getHourlyForecast();
 
   @override
   Widget build(BuildContext context) {
+    final List<HourlyForecast> forecast = widget.forecast.hourly;
     return ListView(
       children: [
         TemperatureChart(forecast),

@@ -39,23 +39,8 @@ class _MyWeatherState extends State<MyWeather> {
         return Scaffold(
           extendBodyBehindAppBar: true,
           extendBody: true,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-          ),
           //appbar scrolldown refresh
-          body: Align(
-            alignment: Alignment.topCenter,
-            child: Stack(children: [
-              //_buildBackground(),//TODO FIX
-              //semi transparent layer
-              Container(
-                decoration: const BoxDecoration(color: Colors.black38),
-              ),
-              //display layer
-              _buildTab(snapshot)
-            ]),
-          ),
+          body: _buildTab(snapshot),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.transparent,
             currentIndex: _selectedIndex,
@@ -72,35 +57,6 @@ class _MyWeatherState extends State<MyWeather> {
           ),
         );
       },
-    );
-  }
-
-  _buildBackground(DailyForecast forecast) {
-    //TODO FIX SCUFFED
-    var x = forecast.weathercode.numeric;
-    var imgString = "assets/";
-
-    if (x < 2) {
-      imgString += "sunny.jpg";
-    } else if (x <= 48) {
-      imgString += "cloudy.jpeg";
-    } else if (x <= 66 || x > 77 && x < 85) {
-      imgString += "rainy.jpg";
-    } else if (x <= 77 || x >= 84 && x <= 85) {
-      imgString += "snow.jpg"; //snow
-    } else if (x <= 99) {
-      imgString += "thunder.jpg"; // THUNDER
-    }
-    //sunny
-    //rain
-    //snow
-    //thunder
-    //cloudy
-    return Image.asset(
-      imgString,
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
     );
   }
 

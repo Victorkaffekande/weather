@@ -12,45 +12,68 @@ import 'package:weather_icons/weather_icons.dart';
 import '../models.dart';
 
 class CurrentWeather extends StatefulWidget {
-  final Forecast _forecast;
-  final Placemark _placemark;
+  final Forecast forecast;
+  final Placemark placemark;
 
-  const CurrentWeather(this._forecast, this._placemark, {Key? key})
+  const CurrentWeather(this.forecast, this.placemark, {Key? key})
       : super(key: key);
 
   @override
   State<CurrentWeather> createState() =>
-      _CurrentWeatherState(_forecast, _placemark);
+      _CurrentWeatherState();
 }
 
 class _CurrentWeatherState extends State<CurrentWeather> {
-  final Forecast _forecast;
-  final Placemark _placemark;
-
-  _CurrentWeatherState(this._forecast,
-      this._placemark); //_CurrentWeatherState(this._forecast, this._placemark);
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<ForecastBloc>(context);
-    final DailyForecast today = _forecast.daily.first;
-    final HourlyForecast now = _forecast.hourly.first;
-    final _city = _placemark.locality;
+    final DailyForecast today = widget.forecast.daily.first;
+    final HourlyForecast now = widget.forecast.hourly.first;
+    final city = widget.placemark.locality;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 150, 10, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildCityDate(today, _city!),
+          _buildCityDate(today, city!),
           _buildWeatherStats(now, today)
         ],
       ),
     );
   }
 
+  _buildBackground(DailyForecast today) {
+    //TODO FIX SCUFFED cringe
+    var x = today.weathercode.numeric;
+    var imgString = "assets/";
+
+    if (x < 2) {
+      imgString += "sunny.jpg";
+    } else if (x <= 48) {
+      imgString += "cloudy.jpeg";
+    } else if (x <= 66 || x > 77 && x < 85) {
+      imgString += "rainy.jpg";
+    } else if (x <= 77 || x >= 84 && x <= 85) {
+      imgString += "snow.jpg"; //snow
+    } else if (x <= 99) {
+      imgString += "thunder.jpg"; // THUNDER
+    }
+    //sunny
+    //rain
+    //snow
+    //thunder
+    //cloudy
+    return Image.asset(
+      imgString,
+      fit: BoxFit.cover,
+      height: double.infinity,
+      width: double.infinity,
+    );
+  }
+
   _buildCityDate(DailyForecast today, String city) {
-    Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WeatherText(

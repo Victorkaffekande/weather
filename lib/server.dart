@@ -77,7 +77,10 @@ class Server {
     print(url);
     final response = await http.get(Uri.parse(url));
     final jsonString = response.body;
-    return json.decode(jsonString);
+    final data = json.decode(jsonString);
+    final daily = DailyForecast.fromJson(data['daily'] as Map<String,dynamic>);
+    final hourly = HourlyForecast.fromJson(data['hourly'] as Map<String,dynamic>);
+    return Forecast(daily: daily, hourly: hourly);
   }
 
   static DailyForecast? getTodayForecast() {
