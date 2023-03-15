@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/myWeather/current_weather.dart';
 import 'package:weather/myWeather/current_weather_screen.dart';
+import 'package:weather/myWeather/forecast_bloc.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../models.dart';
@@ -22,12 +24,18 @@ class _MyWeatherState extends State<MyWeather> {
   int _selectedIndex = 0;
 
   @override
+  void initState() {
+    final bloc = BlocProvider.of<ForecastBloc>(context);
+    bloc.add(LoadEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Server.reload(),
+    final bloc = BlocProvider.of<ForecastBloc>(context);
+    return StreamBuilder(
+      stream: bloc.stream,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (!snapshot.hasData)
-          return const Center(child: CircularProgressIndicator());
         return Scaffold(
           extendBodyBehindAppBar: true,
           extendBody: true,
@@ -39,13 +47,13 @@ class _MyWeatherState extends State<MyWeather> {
           body: Align(
             alignment: Alignment.topCenter,
             child: Stack(children: [
-              _buildBackground(),
+              //_buildBackground(),//TODO FIX
               //semi transparent layer
               Container(
                 decoration: const BoxDecoration(color: Colors.black38),
               ),
               //display layer
-              _tabs.elementAt(_selectedIndex).call(),
+              _buildTab(snapshot)
             ]),
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -67,9 +75,9 @@ class _MyWeatherState extends State<MyWeather> {
     );
   }
 
-  _buildBackground() {
+  _buildBackground(DailyForecast forecast) {
     //TODO FIX SCUFFED
-    var x = Server.getTodayForecast()!.weathercode.numeric;
+    var x = forecast.weathercode.numeric;
     var imgString = "assets/";
 
     if (x < 2) {
@@ -93,6 +101,18 @@ class _MyWeatherState extends State<MyWeather> {
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
+    );
+  }
+
+  _buildTab(AsyncSnapshot snapshot) {
+    print(snapshot);
+    if (snapshot.data is ForecastState) {
+      return _tabs.elementAt(_selectedIndex).call(
+          (snapshot.data as ForecastState).forecast,
+          (snapshot.data as ForecastState).placemark);
+    }
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

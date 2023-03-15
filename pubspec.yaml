@@ -42,6 +42,7 @@ dependencies:
   weather_icons: ^3.0.0
   google_fonts: ^4.0.3
   geocoding: ^2.0.5
+  flutter_bloc: ^8.1.2
 
 dev_dependencies:
   flutter_test:

@@ -24,7 +24,7 @@ class Server {
       await refresh();
       await save();
       await _saveTime();
-    }else{
+    } else {
       await restore();
     }
     return _data;
@@ -36,8 +36,8 @@ class Server {
     DateTime now = DateTime.now();
     Duration timeDifference = now.difference(before);
     //if diff > 5min or null -> save new time
-    if (timeDifference >= const Duration(minutes: 5)){
-     return true;
+    if (timeDifference >= const Duration(minutes: 5)) {
+      return true;
     }
     return false;
   }
@@ -77,8 +77,7 @@ class Server {
     print(url);
     final response = await http.get(Uri.parse(url));
     final jsonString = response.body;
-    _data = json.decode(jsonString);
-    return _data;
+    return json.decode(jsonString);
   }
 
   static DailyForecast? getTodayForecast() {
@@ -98,13 +97,11 @@ class Server {
     return HourlyForecast.fromJson(hourly);
   }
 
-  static Future<String?> getCity() async {
-    String? res;
+  static Future<Placemark> getPlacemark() async {
     Position pos = await _determinePosition();
     print(pos);
-    await placemarkFromCoordinates(pos.latitude, pos.longitude)
-        .then((List<Placemark> value) => res = value[0].locality);
-    return res;
+    return await placemarkFromCoordinates(pos.latitude, pos.longitude)
+        .then((List<Placemark> value) => value[0]);
   }
 
   /// Determine the current position of the device.

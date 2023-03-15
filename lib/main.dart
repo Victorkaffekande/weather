@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather/myWeather/forecast_bloc.dart';
 import 'package:weather/myWeather/my_weather.dart';
 
 void main() {
@@ -11,16 +13,16 @@ class HorizonsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         scrollBehavior: const ConstantScrollBehavior(),
         title: 'Horizons Weather',
         theme: ThemeData.dark(),
-        home: const MyWeather());
+        home: BlocProvider(
+            create: (BuildContext context) => ForecastBloc(),
+            child:  MyWeather()));
   }
 }
-
-
 
 class ConstantScrollBehavior extends ScrollBehavior {
   const ConstantScrollBehavior();
