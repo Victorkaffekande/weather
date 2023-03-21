@@ -19,7 +19,7 @@ class CurrentWeatherScreen extends StatelessWidget {
       children: [
         _buildBackground(today),
         Container(
-          decoration: const BoxDecoration(color: Colors.black38),
+          decoration: const BoxDecoration(color: Colors.black12),
         ),
         PageView(children: [
           CurrentWeather(_forecast, _placemark),
@@ -39,17 +39,12 @@ class CurrentWeatherScreen extends StatelessWidget {
     } else if (x <= 48) {
       imgString += "cloudy.jpeg";
     } else if (x <= 66 || x > 77 && x < 85) {
-      imgString += "rainy.jpg";
+      imgString += "rainy2.jpg";
     } else if (x <= 77 || x >= 84 && x <= 85) {
       imgString += "snow.jpg"; //snow
     } else if (x <= 99) {
       imgString += "thunder.jpg"; // THUNDER
     }
-    //sunny
-    //rain
-    //snow
-    //thunder
-    //cloudy
     return Image.asset(
       imgString,
       fit: BoxFit.cover,

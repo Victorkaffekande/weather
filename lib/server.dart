@@ -9,7 +9,6 @@ import 'models/daily_forecast.dart';
 import 'models/forecast.dart';
 import 'models/hourly_forecast.dart';
 
-
 const String baseAssetURL =
     'https://dartpad-workshops-io2021.web.app/getting_started_with_slivers/assets';
 const String headerImage = '${baseAssetURL}/header.jpeg';
@@ -82,8 +81,9 @@ class Server {
     final response = await http.get(Uri.parse(url));
     final jsonString = response.body;
     final data = json.decode(jsonString);
-    final daily = DailyForecast.fromJson(data['daily'] as Map<String,dynamic>);
-    final hourly = HourlyForecast.fromJson(data['hourly'] as Map<String,dynamic>);
+    final daily = DailyForecast.fromJson(data['daily'] as Map<String, dynamic>);
+    final hourly =
+        HourlyForecast.fromJson(data['hourly'] as Map<String, dynamic>);
     return Forecast(daily: daily, hourly: hourly);
   }
 
@@ -106,9 +106,12 @@ class Server {
 
   static Future<Placemark> getPlacemark() async {
     Position pos = await _determinePosition();
-    print(pos);
-    return await placemarkFromCoordinates(pos.latitude, pos.longitude)
+
+    var x = await placemarkFromCoordinates(pos.latitude, pos.longitude)
         .then((List<Placemark> value) => value[0]);
+    print(x);
+
+    return x;
   }
 
   /// Determine the current position of the device.
